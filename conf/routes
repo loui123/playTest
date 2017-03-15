@@ -16,5 +16,4 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Swagger api document
 GET     /swagger.json           controllers.ApiHelpController.getResources()
-# Swagger api document
-GET     /swagger                                                          controllers.Application.swagger
+GET     /swagger                controllers.Application.swagger
