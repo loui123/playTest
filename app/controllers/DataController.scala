@@ -1,23 +1,34 @@
 package controllers
 
+import java.util.UUID
+
+import controllers.response.DataResponse
+import io.swagger.annotations.Api
+import model.{Data}
 import play.api.mvc._
-import play.api.libs.json.Json._
 
-object DataController extends Controller {
-
+@Api(value = "data",
+     produces = "application/json",
+     consumes = "application/json")
+class DataController extends Controller {
   def add = Action {
-    Ok(toJson(Map("action" -> "add")))
+    val data = Data.add(UUID.randomUUID().toString)
+    Ok(DataResponse.packResponse(data, "add"))
   }
 
-  def remove = Action {
-    Ok(toJson(Map("action" -> "remove")))
+  def remove(id: String) = Action {
+    val data = Data.delete(id)
+    Ok(DataResponse.packResponse(data, "remove"))
   }
 
-  def update = Action {
-    Ok(toJson(Map("action" -> "update")))
+  def update(id: String) = Action {
+    val oldData = Data.get(id).get
+    val data = Data.update(oldData.copy(data = UUID.randomUUID().toString))
+    Ok(DataResponse.packResponse(data, "update"))
   }
 
-  def get = Action {
-    Ok(toJson(Map("action" -> "get")))
+  def get = Action { implicit request =>
+    val data = Data.getAll()
+    Ok(DataResponse.packResponse(data, "get"))
   }
 }
